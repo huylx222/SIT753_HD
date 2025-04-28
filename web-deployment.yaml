@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  labels:
+    app: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: web
+        image: australia-southeast1-docker.pkg.dev/sit737-25t1-le-b981ee5/test-project-repo/test_project-web:v2
+        ports:
+        - containerPort: 3000
+        env:
+        - name: API_URL
+          value: http://api-service:5001
+        volumeMounts:
+        - name: web-uploads
+          mountPath: /app/uploads
+      volumes:
+      - name: web-uploads
+        emptyDir: {}
+      imagePullSecrets:
+      - name: gcp-registry-creds
