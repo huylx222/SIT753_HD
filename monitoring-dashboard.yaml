@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring-dashboard
+  template:
+    metadata:
+      labels:
+        app: monitoring-dashboard
+    spec:
+      containers:
+      - name: dashboard
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html
+      initContainers:
+      - name: generate-dashboard
+        image: busybox
+        command:
+        - /bin/sh
+        - -c
+        - |
+          cat <<EOT > /html/index.html
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Application Monitoring Dashboard</title>
+            <meta http-equiv="refresh" content="30">
+            <style>
+              body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+              .container { max-width: 800px; margin: 0 auto; }
+              .service { margin-bottom: 20px; padding: 15px; border-radius: 5px; }
+              .up { background-color: #d4edda; color: #155724; }
+              .down { background-color: #f8d7da; color: #721c24; }
+              h1 { color: #333; }
+              h2 { margin-top: 0; }
+              .timestamp { color: #666; font-size: 0.8em; margin-bottom: 10px; }
+            </style>
+            <script>
+              function checkService(url, elementId) {
+                fetch(url)
+                  .then(response => {
+                    document.getElementById(elementId).className = 'service up';
+                    document.getElementById(elementId + '-status').innerText = 'UP';
+                  })
+                  .catch(error => {
+                    document.getElementById(elementId).className = 'service down';
+                    document.getElementById(elementId + '-status').innerText = 'DOWN';
+                  });
+              }
+              
+              window.onload = function() {
+                document.getElementById('timestamp').innerText = new Date().toLocaleString();
+                checkService('http://web-service', 'web-service');
+                checkService('http://api-service:5001/test', 'api-service');
+                
+                // Update status every 30 seconds
+                setInterval(function() {
+                  document.getElementById('timestamp').innerText = new Date().toLocaleString();
+                  checkService('http://web-service', 'web-service');
+                  checkService('http://api-service:5001/test', 'api-service');
+                }, 30000);
+              };
+            </script>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Application Monitoring Dashboard</h1>
+              <p class="timestamp">Last updated: <span id="timestamp"></span></p>
+              
+              <div id="web-service" class="service">
+                <h2>Web Service</h2>
+                <p>Status: <strong id="web-service-status">Checking...</strong></p>
+              </div>
+              
+              <div id="api-service" class="service">
+                <h2>API Service</h2>
+                <p>Status: <strong id="api-service-status">Checking...</strong></p>
+              </div>
+            </div>
+          </body>
+          </html>
+          EOT
+        volumeMounts:
+        - name: html
+          mountPath: /html
+      volumes:
+      - name: html
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: monitoring-dashboard-service
+spec:
+  selector:
+    app: monitoring-dashboard
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer
