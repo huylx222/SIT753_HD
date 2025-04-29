@@ -1,0 +1,53 @@
+{
+    "displayName": "Face Detection - High Memory Usage",
+    "combiner": "OR",
+    "conditions": [
+      {
+        "displayName": "API Container Memory Usage",
+        "conditionThreshold": {
+          "filter": "resource.type = \"k8s_container\" AND resource.labels.container_name = \"api\" AND metric.type = \"kubernetes.io/container/memory/used_bytes\" AND resource.labels.cluster_name = \"cluster-1\"",
+          "aggregations": [
+            {
+              "alignmentPeriod": "60s",
+              "perSeriesAligner": "ALIGN_MEAN",
+              "crossSeriesReducer": "REDUCE_MEAN"
+            }
+          ],
+          "comparison": "COMPARISON_GT",
+          "thresholdValue": 800000000,
+          "duration": "300s",
+          "trigger": {
+            "count": 1
+          }
+        }
+      },
+      {
+        "displayName": "Web Container Memory Usage",
+        "conditionThreshold": {
+          "filter": "resource.type = \"k8s_container\" AND resource.labels.container_name = \"web\" AND metric.type = \"kubernetes.io/container/memory/used_bytes\" AND resource.labels.cluster_name = \"cluster-1\"",
+          "aggregations": [
+            {
+              "alignmentPeriod": "60s",
+              "perSeriesAligner": "ALIGN_MEAN",
+              "crossSeriesReducer": "REDUCE_MEAN"
+            }
+          ],
+          "comparison": "COMPARISON_GT",
+          "thresholdValue": 600000000,
+          "duration": "300s",
+          "trigger": {
+            "count": 1
+          }
+        }
+      }
+    ],
+    "alertStrategy": {
+      "autoClose": "604800s"
+    },
+    "documentation": {
+      "content": "This alert triggers when memory usage for the API container exceeds 800MB or the Web container exceeds 600MB for more than 5 minutes continuously. High memory usage can lead to container termination or degraded application performance. Consider increasing memory limits or investigating memory leaks if this alert triggers frequently.",
+      "mimeType": "text/markdown"
+    },
+    "severity": "WARNING",
+    "enabled": true
+  }
