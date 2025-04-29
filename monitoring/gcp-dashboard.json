@@ -1,45 +1,230 @@
 {
-    "title": "CPU Usage by Pod",
-    "xyChart": {
-      "dataSets": [
-        {
-          "timeSeriesQuery": {
-            "timeSeriesFilter": {
-              "filter": "metric.type=\"kubernetes.io/container/cpu/core_usage_time\" resource.type=\"k8s_container\" resource.labels.container_name=\"api\"",
-              "aggregation": {
-                "perSeriesAligner": "ALIGN_RATE",
-                "crossSeriesReducer": "REDUCE_SUM",
-                "groupByFields": [
-                  "resource.label.pod_name"
-                ]
+    "dashboard": {
+      "displayName": "Face Detection Application Dashboard",
+      "gridLayout": {
+        "columns": 2,
+        "widgets": [
+          {
+            "title": "CPU Usage by Pod",
+            "xyChart": {
+              "dataSets": [
+                {
+                  "timeSeriesQuery": {
+                    "timeSeriesFilter": {
+                      "filter": "metric.type=\"kubernetes.io/container/cpu/core_usage_time\" resource.type=\"k8s_container\" resource.labels.container_name=\"api\"",
+                      "aggregation": {
+                        "perSeriesAligner": "ALIGN_RATE",
+                        "crossSeriesReducer": "REDUCE_SUM",
+                        "groupByFields": [
+                          "resource.label.pod_name"
+                        ]
+                      }
+                    },
+                    "unitOverride": "1"
+                  },
+                  "plotType": "LINE",
+                  "targetAxis": "Y1"
+                },
+                {
+                  "timeSeriesQuery": {
+                    "timeSeriesFilter": {
+                      "filter": "metric.type=\"kubernetes.io/container/cpu/core_usage_time\" resource.type=\"k8s_container\" resource.labels.container_name=\"web\"",
+                      "aggregation": {
+                        "perSeriesAligner": "ALIGN_RATE",
+                        "crossSeriesReducer": "REDUCE_SUM",
+                        "groupByFields": [
+                          "resource.label.pod_name"
+                        ]
+                      }
+                    },
+                    "unitOverride": "1"
+                  },
+                  "plotType": "LINE",
+                  "targetAxis": "Y1"
+                }
+              ],
+              "yAxis": {
+                "label": "CPU usage (cores)",
+                "scale": "LINEAR"
               }
-            },
-            "unitOverride": "1"
+            }
           },
-          "plotType": "LINE",
-          "targetAxis": "Y1"
-        },
-        {
-          "timeSeriesQuery": {
-            "timeSeriesFilter": {
-              "filter": "metric.type=\"kubernetes.io/container/cpu/core_usage_time\" resource.type=\"k8s_container\" resource.labels.container_name=\"web\"",
-              "aggregation": {
-                "perSeriesAligner": "ALIGN_RATE",
-                "crossSeriesReducer": "REDUCE_SUM",
-                "groupByFields": [
-                  "resource.label.pod_name"
-                ]
+          {
+            "title": "Memory Usage by Pod",
+            "xyChart": {
+              "dataSets": [
+                {
+                  "timeSeriesQuery": {
+                    "timeSeriesFilter": {
+                      "filter": "metric.type=\"kubernetes.io/container/memory/used_bytes\" resource.type=\"k8s_container\" resource.labels.container_name=\"api\"",
+                      "aggregation": {
+                        "perSeriesAligner": "ALIGN_MEAN",
+                        "crossSeriesReducer": "REDUCE_SUM",
+                        "groupByFields": [
+                          "resource.label.pod_name"
+                        ]
+                      }
+                    },
+                    "unitOverride": "By"
+                  },
+                  "plotType": "LINE",
+                  "targetAxis": "Y1"
+                },
+                {
+                  "timeSeriesQuery": {
+                    "timeSeriesFilter": {
+                      "filter": "metric.type=\"kubernetes.io/container/memory/used_bytes\" resource.type=\"k8s_container\" resource.labels.container_name=\"web\"",
+                      "aggregation": {
+                        "perSeriesAligner": "ALIGN_MEAN",
+                        "crossSeriesReducer": "REDUCE_SUM",
+                        "groupByFields": [
+                          "resource.label.pod_name"
+                        ]
+                      }
+                    },
+                    "unitOverride": "By"
+                  },
+                  "plotType": "LINE",
+                  "targetAxis": "Y1"
+                }
+              ],
+              "yAxis": {
+                "label": "Memory usage (bytes)",
+                "scale": "LINEAR"
               }
-            },
-            "unitOverride": "1"
+            }
           },
-          "plotType": "LINE",
-          "targetAxis": "Y1"
-        }
-      ],
-      "yAxis": {
-        "label": "CPU usage (cores)",
-        "scale": "LINEAR"
+          {
+            "title": "Network Traffic by Pod",
+            "xyChart": {
+              "dataSets": [
+                {
+                  "timeSeriesQuery": {
+                    "timeSeriesFilter": {
+                      "filter": "metric.type=\"kubernetes.io/pod/network/received_bytes_count\" resource.type=\"k8s_pod\"",
+                      "aggregation": {
+                        "perSeriesAligner": "ALIGN_RATE",
+                        "crossSeriesReducer": "REDUCE_SUM",
+                        "groupByFields": [
+                          "resource.label.pod_name"
+                        ]
+                      }
+                    },
+                    "unitOverride": "By"
+                  },
+                  "plotType": "LINE",
+                  "targetAxis": "Y1"
+                },
+                {
+                  "timeSeriesQuery": {
+                    "timeSeriesFilter": {
+                      "filter": "metric.type=\"kubernetes.io/pod/network/sent_bytes_count\" resource.type=\"k8s_pod\"",
+                      "aggregation": {
+                        "perSeriesAligner": "ALIGN_RATE",
+                        "crossSeriesReducer": "REDUCE_SUM",
+                        "groupByFields": [
+                          "resource.label.pod_name"
+                        ]
+                      }
+                    },
+                    "unitOverride": "By"
+                  },
+                  "plotType": "LINE",
+                  "targetAxis": "Y1"
+                }
+              ],
+              "yAxis": {
+                "label": "Network traffic (bytes/s)",
+                "scale": "LINEAR"
+              }
+            }
+          },
+          {
+            "title": "Container Restarts",
+            "xyChart": {
+              "dataSets": [
+                {
+                  "timeSeriesQuery": {
+                    "timeSeriesFilter": {
+                      "filter": "metric.type=\"kubernetes.io/container/restart_count\" resource.type=\"k8s_container\"",
+                      "aggregation": {
+                        "perSeriesAligner": "ALIGN_DELTA",
+                        "crossSeriesReducer": "REDUCE_SUM",
+                        "groupByFields": [
+                          "resource.label.pod_name"
+                        ]
+                      }
+                    },
+                    "unitOverride": "1"
+                  },
+                  "plotType": "STACKED_BAR",
+                  "targetAxis": "Y1"
+                }
+              ],
+              "yAxis": {
+                "label": "Restart count",
+                "scale": "LINEAR"
+              }
+            }
+          },
+          {
+            "title": "HTTP Latency",
+            "xyChart": {
+              "dataSets": [
+                {
+                  "timeSeriesQuery": {
+                    "timeSeriesFilter": {
+                      "filter": "metric.type=\"external.googleapis.com/prometheus/http_request_duration_seconds_sum\" resource.type=\"prometheus_target\"",
+                      "aggregation": {
+                        "perSeriesAligner": "ALIGN_RATE",
+                        "crossSeriesReducer": "REDUCE_SUM",
+                        "groupByFields": [
+                          "metric.label.endpoint"
+                        ]
+                      }
+                    },
+                    "unitOverride": "s"
+                  },
+                  "plotType": "LINE",
+                  "targetAxis": "Y1"
+                }
+              ],
+              "yAxis": {
+                "label": "Latency (seconds)",
+                "scale": "LINEAR"
+              }
+            }
+          },
+          {
+            "title": "HTTP Request Count",
+            "xyChart": {
+              "dataSets": [
+                {
+                  "timeSeriesQuery": {
+                    "timeSeriesFilter": {
+                      "filter": "metric.type=\"external.googleapis.com/prometheus/http_requests_total\" resource.type=\"prometheus_target\"",
+                      "aggregation": {
+                        "perSeriesAligner": "ALIGN_RATE",
+                        "crossSeriesReducer": "REDUCE_SUM",
+                        "groupByFields": [
+                          "metric.label.endpoint",
+                          "metric.label.status"
+                        ]
+                      }
+                    },
+                    "unitOverride": "1"
+                  },
+                  "plotType": "STACKED_BAR",
+                  "targetAxis": "Y1"
+                }
+              ],
+              "yAxis": {
+                "label": "Requests per second",
+                "scale": "LINEAR"
+              }
+            }
+          }
+        ]
       }
     }
   }
