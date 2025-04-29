@@ -8,11 +8,12 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: web-service
+      app: web  # Match the actual label in your web-service
   endpoints:
-  - port: http
+  - targetPort: 3000  # Use targetPort instead of port name
     path: /metrics
     interval: 15s
+    scrapeTimeout: 10s
   namespaceSelector:
     matchNames:
     - default

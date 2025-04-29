@@ -8,11 +8,12 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: api-service
+      app: api  # Match the actual label in your api-service
   endpoints:
-  - port: http
+  - targetPort: 5001  # Use targetPort instead of port name since your service doesn't have named ports
     path: /metrics
     interval: 15s
+    scrapeTimeout: 10s
   namespaceSelector:
     matchNames:
     - default
