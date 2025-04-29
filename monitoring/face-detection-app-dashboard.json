@@ -1,0 +1,125 @@
+{
+    "dashboard": {
+      "id": null,
+      "title": "Face Detection App Dashboard",
+      "tags": ["kubernetes", "face-detection"],
+      "timezone": "browser",
+      "editable": true,
+      "panels": [
+        {
+          "title": "API Request Rate",
+          "type": "graph",
+          "datasource": "Prometheus",
+          "targets": [
+            {
+              "expr": "sum(rate(http_requests_total{service=\"api-service\"}[5m])) by (status)",
+              "legendFormat": "{{status}}"
+            }
+          ],
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "title": "API Response Time (95th percentile)",
+          "type": "graph",
+          "datasource": "Prometheus",
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service=\"api-service\"}[5m])) by (le))",
+              "legendFormat": "95th percentile"
+            }
+          ],
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          }
+        },
+        {
+          "title": "Web Request Rate",
+          "type": "graph",
+          "datasource": "Prometheus",
+          "targets": [
+            {
+              "expr": "sum(rate(http_requests_total{service=\"web-service\"}[5m])) by (status)",
+              "legendFormat": "{{status}}"
+            }
+          ],
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          }
+        },
+        {
+          "title": "Memory Usage",
+          "type": "graph",
+          "datasource": "Prometheus",
+          "targets": [
+            {
+              "expr": "sum(container_memory_usage_bytes{namespace=\"default\",pod=~\"api-deployment.*\"}) by (pod)",
+              "legendFormat": "API - {{pod}}"
+            },
+            {
+              "expr": "sum(container_memory_usage_bytes{namespace=\"default\",pod=~\"web-deployment.*\"}) by (pod)",
+              "legendFormat": "Web - {{pod}}"
+            }
+          ],
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          }
+        },
+        {
+          "title": "CPU Usage",
+          "type": "graph",
+          "datasource": "Prometheus",
+          "targets": [
+            {
+              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"default\",pod=~\"api-deployment.*\"}[5m])) by (pod)",
+              "legendFormat": "API - {{pod}}"
+            },
+            {
+              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"default\",pod=~\"web-deployment.*\"}[5m])) by (pod)",
+              "legendFormat": "Web - {{pod}}"
+            }
+          ],
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 16
+          }
+        },
+        {
+          "title": "Error Rate",
+          "type": "graph",
+          "datasource": "Prometheus",
+          "targets": [
+            {
+              "expr": "sum(rate(http_requests_total{service=\"api-service\",status=~\"5..\"}[5m])) / sum(rate(http_requests_total{service=\"api-service\"}[5m])) * 100",
+              "legendFormat": "API Error Rate %"
+            },
+            {
+              "expr": "sum(rate(http_requests_total{service=\"web-service\",status=~\"5..\"}[5m])) / sum(rate(http_requests_total{service=\"web-service\"}[5m])) * 100",
+              "legendFormat": "Web Error Rate %"
+            }
+          ],
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 16
+          }
+        }
+      ]
+    }
+  }

@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: app-health-check
+  namespace: default
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: health-check
+            image: curlimages/curl:7.80.0
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # Get web service endpoint
+              WEB_SERVICE=$(kubectl get service web-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+              
+              # Check web service health
+              if ! curl -s -f http://$WEB_SERVICE/test-api; then
+                echo "Web service health check failed"
+                exit 1
+              fi
+              
+              echo "Health checks passed successfully"
+          restartPolicy: OnFailure
