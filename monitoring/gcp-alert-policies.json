@@ -5,7 +5,7 @@
       {
         "displayName": "CPU usage for API containers",
         "conditionThreshold": {
-          "filter": "metric.type=\"kubernetes.io/container/cpu/core_usage_time\" resource.type=\"k8s_container\" metadata.system_labels.\"container_name\"=\"api\"",
+          "filter": "metric.type=\"kubernetes.io/container/cpu/core_usage_time\" resource.type=\"k8s_container\" resource.labels.container_name=\"api\"",
           "aggregations": [
             {
               "alignmentPeriod": "60s",
@@ -27,7 +27,7 @@
       {
         "displayName": "CPU usage for Web containers",
         "conditionThreshold": {
-          "filter": "metric.type=\"kubernetes.io/container/cpu/core_usage_time\" resource.type=\"k8s_container\" metadata.system_labels.\"container_name\"=\"web\"",
+          "filter": "metric.type=\"kubernetes.io/container/cpu/core_usage_time\" resource.type=\"k8s_container\" resource.labels.container_name=\"web\"",
           "aggregations": [
             {
               "alignmentPeriod": "60s",
