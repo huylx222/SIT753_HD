@@ -35,19 +35,19 @@ echo "Created notification channel with ID: $NOTIFICATION_CHANNEL_ID"
 # Create alert policies using the YAML files
 echo "Creating CPU utilization alert policy..."
 gcloud alpha monitoring policies create \
-    --policy-from-file=monitoring/alerts/cpu-alert.yaml \
+    --policy-from-file=monitoring/cpu-alert.yaml \
     --notification-channels=$NOTIFICATION_CHANNEL_ID \
     --project=${PROJECT_ID}
 
 echo "Creating memory utilization alert policy..."
 gcloud alpha monitoring policies create \
-    --policy-from-file=monitoring/alerts/memory-alert.yaml \
+    --policy-from-file=monitoring/memory-alert.yaml \
     --notification-channels=$NOTIFICATION_CHANNEL_ID \
     --project=${PROJECT_ID}
 
 echo "Creating container restart alert policy..."
 gcloud alpha monitoring policies create \
-    --policy-from-file=monitoring/alerts/restart-alert.yaml \
+    --policy-from-file=monitoring/restart-alert.yaml \
     --notification-channels=$NOTIFICATION_CHANNEL_ID \
     --project=${PROJECT_ID}
 
