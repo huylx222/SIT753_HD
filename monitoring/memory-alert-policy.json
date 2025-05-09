@@ -1,23 +1,23 @@
 {
-  "displayName": "Container Restart Alert",
+  "displayName": "High Memory Usage Alert",
   "documentation": {
-    "content": "Multiple container restarts detected within the last 15 minutes. This may indicate application crashes or resource constraints.",
+    "content": "Memory usage has exceeded 85% for over 5 minutes on either the API or web containers. Check for memory leaks or consider increasing resource limits.",
     "mimeType": "text/markdown"
   },
   "conditions": [
     {
-      "displayName": "Container restart count exceeds threshold",
+      "displayName": "Memory usage exceeds threshold",
       "conditionThreshold": {
-        "filter": "resource.type=\"k8s_container\" AND (resource.labels.container_name=\"api\" OR resource.labels.container_name=\"web\") AND metric.type=\"kubernetes.io/container/restart_count\"",
+        "filter": "resource.type=\"k8s_container\" AND (resource.labels.container_name=\"api\" OR resource.labels.container_name=\"web\") AND metric.type=\"kubernetes.io/container/memory/used_bytes\"",
         "aggregations": [
           {
-            "alignmentPeriod": "900s",
-            "perSeriesAligner": "ALIGN_DELTA"
+            "alignmentPeriod": "60s",
+            "perSeriesAligner": "ALIGN_MEAN"
           }
         ],
         "comparison": "COMPARISON_GT",
-        "thresholdValue": 2,
-        "duration": "0s",
+        "thresholdValue": 0.05,
+        "duration": "300s",
         "trigger": {
           "count": 1
         }
@@ -25,7 +25,7 @@
     }
   ],
   "alertStrategy": {
-    "autoClose": "3600s"
+    "autoClose": "1800s"
   },
   "combiner": "OR"
 }
