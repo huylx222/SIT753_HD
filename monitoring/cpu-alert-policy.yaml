@@ -1,0 +1,31 @@
+{
+  "displayName": "High CPU Usage Alert",
+  "documentation": {
+    "content": "CPU usage has exceeded 80% for over 5 minutes on either the API or web containers. Check application performance and consider scaling the deployment if this is a sustained trend.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "CPU usage exceeds threshold",
+      "conditionThreshold": {
+        "filter": "resource.type=\"k8s_container\" AND (resource.labels.container_name=\"api\" OR resource.labels.container_name=\"web\") AND metric.type=\"kubernetes.io/container/cpu/core_usage_time\"",
+        "aggregations": [
+          {
+            "alignmentPeriod": "60s",
+            "perSeriesAligner": "ALIGN_RATE"
+          }
+        ],
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 0.8,
+        "duration": "300s",
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "alertStrategy": {
+    "autoClose": "1800s"
+  },
+  "combiner": "OR"
+}
