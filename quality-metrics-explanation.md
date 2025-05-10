@@ -12,7 +12,7 @@ The quality gate is configured to check these key thresholds:
   - D = at least 1 critical bug
   - E = at least 1 blocker bug
 
-- **Security Rating**: Must be B or better
+- **Security Rating**: Must be C or better
   - A = 0 vulnerabilities
   - B = at least 1 minor vulnerability
   - C = at least 1 major vulnerability 
