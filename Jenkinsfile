@@ -289,9 +289,6 @@ pipeline {
                         # Install ESLint and security plugin
                         npm install --no-save eslint eslint-plugin-security || true
                         
-                        # Create minimal config
-                        echo '{"plugins": ["security"],"extends": ["plugin:security/recommended"]}' > .eslintrc.temp.json
-                        
                         # Scan app.js if it exists
                         if [ -f app.js ]; then
                             echo "Scanning app.js for security issues..." > ../security-reports/js-code-scan.txt
