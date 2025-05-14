@@ -16,6 +16,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out code from GitHub...'
+                cleanWs()
                 
                 // Check out code from GitHub
                 checkout([
