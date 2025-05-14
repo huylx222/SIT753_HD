@@ -16,7 +16,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out code from GitHub...'
-                cleanWs()
+                cleanWs deleteDirs: true, disableDeferredWipeout: true, notFailBuild: true
                 
                 // Check out code from GitHub
                 checkout([
