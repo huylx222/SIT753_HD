@@ -303,8 +303,6 @@ pipeline {
                         
                         echo "$ISSUES security issues identified" >> ../security-reports/js-code-scan.txt
                         
-                        # Cleanup
-                        rm .eslintrc.temp.json
                         cd ..
                     else
                         echo "No JavaScript files found in expected locations" > security-reports/js-code-scan.txt
