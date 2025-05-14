@@ -301,8 +301,6 @@ pipeline {
                             find public -name "*.js" -exec ./node_modules/.bin/eslint --no-eslintrc -c .eslintrc.temp.json --plugin security {} \\; >> ../security-reports/js-code-scan.txt 2>&1 || true
                         fi
                         
-                        # Count security issues found
-                        ISSUES=$(grep -c "security/" ../security-reports/js-code-scan.txt || echo 0)
                         echo "$ISSUES security issues identified" >> ../security-reports/js-code-scan.txt
                         
                         # Cleanup
