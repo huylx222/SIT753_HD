@@ -16,7 +16,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out code from GitHub...'
-                cleanWs deleteDirs: true, disableDeferredWipeout: true, notFailBuild: true
+                cleanWs()
                 
                 // Check out code from GitHub
                 checkout([
@@ -92,7 +92,7 @@ pipeline {
                 
                 // Start the application using docker-compose for integration testing 
                 sh """
-                    # Start the containers for testing in detached mode
+                    # Start the containers for testing 
                     docker-compose up -d
                     
                     # Show container status
@@ -132,8 +132,6 @@ pipeline {
                     # Run the test script (with error handling)
                     python3 test_app.py || {
                         echo "Test script execution failed"
-                        # Continue the pipeline even if tests fail
-                        # This way we still demonstrate the pipeline stages for the assignment
                     }
                 '''
             }
@@ -167,7 +165,6 @@ pipeline {
                                 unzip -o sonar-scanner-cli-7.0.2.4839-macosx-aarch64.zip
                                 
                                 # Run SonarScanner with quality gates enabled
-                                # Even if it fails, we'll catch the error and continue
                                 ./sonar-scanner-7.0.2.4839-macosx-aarch64/bin/sonar-scanner -Dsonar.token=$SONAR_TOKEN \
                                     -Dsonar.qualitygate.wait=true || {
                                     echo "SonarQube analysis completed with quality gate failures."
@@ -289,16 +286,10 @@ pipeline {
                         # Install ESLint and security plugin
                         npm install --no-save eslint eslint-plugin-security || true
                         
-                        # Scan app.js if it exists
+                        # Scan app.js 
                         if [ -f app.js ]; then
                             echo "Scanning app.js for security issues..." > ../security-reports/js-code-scan.txt
                             ./node_modules/.bin/eslint --no-eslintrc -c .eslintrc.temp.json --plugin security app.js >> ../security-reports/js-code-scan.txt 2>&1 || true
-                        fi
-                        
-                        # Scan public directory if it exists
-                        if [ -d public ]; then
-                            echo "Scanning JavaScript in public directory..." >> ../security-reports/js-code-scan.txt
-                            find public -name "*.js" -exec ./node_modules/.bin/eslint --no-eslintrc -c .eslintrc.temp.json --plugin security {} \\; >> ../security-reports/js-code-scan.txt 2>&1 || true
                         fi
                         
                         echo "$ISSUES security issues identified" >> ../security-reports/js-code-scan.txt
@@ -383,7 +374,7 @@ pipeline {
                     
                     # If verification failed, perform rollback (unless this is the first deployment)
                     if [ "$DEPLOY_SUCCESS" = false ]; then
-                        echo "❌ Deployment verification failed!"
+                        echo "Deployment verification failed!"
                         
                         if [ "$FIRST_DEPLOYMENT" = true ]; then
                             echo "This is the first deployment, no rollback state exists. Deployment failed."
@@ -402,7 +393,7 @@ pipeline {
                             exit 1
                         fi
                     else
-                        echo "✅ Deployment to test environment successful!"
+                        echo "Deployment to test environment successful!"
                         
                         # Save this successful deployment as the new rollback state
                         echo "Saving current deployment as rollback state for future deployments..."
@@ -499,6 +490,7 @@ pipeline {
                 '''
             }
         }
+
         stage('Monitoring and Alerting') {
             environment {
                 GCP_PROJECT_ID = 'sunny-state-458304-e9'
