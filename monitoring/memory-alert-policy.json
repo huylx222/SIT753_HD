@@ -1,7 +1,7 @@
 {
   "displayName": "High Memory Usage Alert",
   "documentation": {
-    "content": "Memory usage has exceeded 85% for over 5 minutes on either the API or web containers. Check for memory leaks or consider increasing resource limits.",
+    "content": "Memory usage has exceeded 85% for over 5 minutes on either the API or web containers. This could indicate a memory leak or insufficient resources. Check container logs and consider restarting the affected services or increasing memory allocation.",
     "mimeType": "text/markdown"
   },
   "conditions": [
@@ -16,7 +16,7 @@
           }
         ],
         "comparison": "COMPARISON_GT",
-        "thresholdValue": 0.05,
+        "thresholdValue": 209715200,  // 200MB in bytes
         "duration": "300s",
         "trigger": {
           "count": 1
@@ -27,5 +27,19 @@
   "alertStrategy": {
     "autoClose": "1800s"
   },
-  "combiner": "OR"
+  "combiner": "OR",
+  "notificationChannels": [
+    "projects/sunny-state-458304-e9/notificationChannels/123456789",
+    "projects/sunny-state-458304-e9/notificationChannels/987654321",
+    "projects/sunny-state-458304-e9/notificationChannels/112233445"
+  ],
+  "userLabels": {
+    "severity": "critical",
+    "service": "face-detection-app",
+    "team": "devops"
+  },
+  "documentation": {
+    "content": "Memory usage has exceeded the threshold for over 5 minutes. This alert will notify:\n- Email: lexuanhuy1234@gmail.com\n- Slack: #devops-alerts\n- Microsoft Teams: DevOps channel\n\nPossible causes:\n- Memory leak in application code\n- Insufficient memory allocation\n- Unusual traffic patterns\n\nReview container metrics in the GKE dashboard for more details.",
+    "mimeType": "text/markdown"
+  }
 }
