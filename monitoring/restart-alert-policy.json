@@ -25,21 +25,12 @@
     }
   ],
   "alertStrategy": {
-    "autoClose": "86400s"  // 24 hours
+    "autoClose": "86400s" 
   },
   "combiner": "OR",
   "notificationChannels": [
     "projects/sunny-state-458304-e9/notificationChannels/123456789",
     "projects/sunny-state-458304-e9/notificationChannels/987654321",
     "projects/sunny-state-458304-e9/notificationChannels/112233445"
-  ],
-  "userLabels": {
-    "severity": "warning",
-    "service": "face-detection-app",
-    "team": "devops"
-  },
-  "documentation": {
-    "content": "Container restart detected in the face-detection-app. This alert will notify:\n- Email: lexuanhuy1234@gmail.com\n- Slack: #devops-alerts\n- Microsoft Teams: DevOps channel\n\nAction items:\n1. Check `kubectl describe pod` for termination reasons\n2. Review container logs before restart occurred\n3. Check for Out-of-Memory events or crashes\n\nFrequent restarts may indicate application bugs or resource constraints.",
-    "mimeType": "text/markdown"
-  }
+  ]
 }

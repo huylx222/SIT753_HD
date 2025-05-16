@@ -16,7 +16,7 @@
           }
         ],
         "comparison": "COMPARISON_GT",
-        "thresholdValue": 209715200,  // 200MB in bytes
+        "thresholdValue": 209715200,  
         "duration": "300s",
         "trigger": {
           "count": 1
@@ -32,14 +32,5 @@
     "projects/sunny-state-458304-e9/notificationChannels/123456789",
     "projects/sunny-state-458304-e9/notificationChannels/987654321",
     "projects/sunny-state-458304-e9/notificationChannels/112233445"
-  ],
-  "userLabels": {
-    "severity": "critical",
-    "service": "face-detection-app",
-    "team": "devops"
-  },
-  "documentation": {
-    "content": "Memory usage has exceeded the threshold for over 5 minutes. This alert will notify:\n- Email: lexuanhuy1234@gmail.com\n- Slack: #devops-alerts\n- Microsoft Teams: DevOps channel\n\nPossible causes:\n- Memory leak in application code\n- Insufficient memory allocation\n- Unusual traffic patterns\n\nReview container metrics in the GKE dashboard for more details.",
-    "mimeType": "text/markdown"
-  }
+  ]
 }

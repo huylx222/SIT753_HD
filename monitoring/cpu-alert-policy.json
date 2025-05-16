@@ -32,14 +32,5 @@
     "projects/sunny-state-458304-e9/notificationChannels/123456789",
     "projects/sunny-state-458304-e9/notificationChannels/987654321",
     "projects/sunny-state-458304-e9/notificationChannels/112233445"
-  ],
-  "userLabels": {
-    "severity": "critical",
-    "service": "face-detection-app",
-    "team": "devops"
-  },
-  "documentation": {
-    "content": "CPU usage has exceeded 80% for over 5 minutes. This alert will notify:\n- Email: lexuanhuy1234@gmail.com\n- Slack: #devops-alerts\n- Microsoft Teams: DevOps channel\n\nTroubleshooting steps:\n1. Check container logs\n2. Verify load patterns\n3. Consider scaling if legitimate traffic increase",
-    "mimeType": "text/markdown"
-  }
+  ]
 }
